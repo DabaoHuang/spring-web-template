@@ -32,6 +32,8 @@ import java.util.*;
 @ComponentScan({"ocean.aop","ocean.*"})  //掃描package裡的Class，並對spring物件執行注入
 public class WebConfig extends WebMvcConfigurerAdapter{
 
+    public Locale defaultLocale = Locale.TAIWAN;
+
     /* 用來過濾 沒有權限的使用者，此處需要克制一個攔截器
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -56,15 +58,13 @@ public class WebConfig extends WebMvcConfigurerAdapter{
     public PropertySourcesPlaceholderConfigurer properties() {
         PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer = new PropertySourcesPlaceholderConfigurer();
         propertySourcesPlaceholderConfigurer.setLocation(new ClassPathResource("environment.properties"));
-        /*
+        /* 多屬性檔設定方式
         ArrayList<Resource> list = new ArrayList<Resource>();
         list.add(new ClassPathResource("environment.properties"));
         list.add(new ClassPathResource("dbCollection.properties"));
         */
         return propertySourcesPlaceholderConfigurer;
     }
-
-    //
 
     @Bean
     public ServletContextTemplateResolver templateResolver(){
@@ -84,7 +84,6 @@ public class WebConfig extends WebMvcConfigurerAdapter{
         engine.addDialect(new LayoutDialect());
         return engine;
     }
-
 
     @Bean
     public ViewResolver viewResolver(){
@@ -125,18 +124,13 @@ public class WebConfig extends WebMvcConfigurerAdapter{
         localeResolver.setDefaultLocale(Locale.TAIWAN);
         return localeResolver;
     }
-
-
-    public Locale defaultLocale = Locale.TAIWAN;
-
-
+    
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor(){
         LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
         localeChangeInterceptor.setParamName("lang");
         return localeChangeInterceptor;
     }
-
 
     /*
     @Bean
@@ -146,7 +140,6 @@ public class WebConfig extends WebMvcConfigurerAdapter{
         // Define all possible view resolvers
         List<ViewResolver> resolvers = new ArrayList<ViewResolver>();
         resolvers.add(jsonViewResolver());
-
         // resolvers.add(jaxb2MarshallingXmlViewResolver());
         // resolvers.add(jspViewResolver());
         // resolvers.add(pdfViewResolver());
@@ -168,7 +161,6 @@ public class WebConfig extends WebMvcConfigurerAdapter{
         };
     }
     */
-
     /*
     @Bean
     public ViewResolver jaxb2MarshallingXmlViewResolver() {
