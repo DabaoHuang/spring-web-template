@@ -21,10 +21,13 @@ node 安裝是一個比較容易的方式。
 
 # install Backend-end library
 1. mvn install
+2. 這會將java有使用的jar檔都下載好。
 
 
 # install front-end library
 1.npm install   
+2.這會將前端的各種套件下載。
+3.npm 會依package.json裡的列表抓取所需要的套件。
 
 # run tomcat
 1. mvn tomcat7:run or mvn tomcat7:run
