@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
  */
 
 @Controller
+@ResponseBody
 @RequestMapping("/test")   //spring mapping url
 public class TestControl {
     /**詢問 api 是否有在正常運作*/
