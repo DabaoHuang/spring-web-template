@@ -45,5 +45,9 @@ http:127.0.0.1:8080/index.jsp
 1. 以上指令若有發生問題 試試加上 sudo
 2. 使用maven並不受限於使用什麼IDE，但是建議使用intellij.
 
+# 還未完成部分
+1. gulp 的 script 
+2. 前端工程架構 less bable livereload.
+3. DB Connections interface.  (mongodb and T sql db)
 
 
