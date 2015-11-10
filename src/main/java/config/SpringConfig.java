@@ -30,7 +30,7 @@ import java.util.*;
 @Configuration
 @EnableWebMvc                           //same as  <mvc:annotation-driven/>
 @ComponentScan({"ocean.aop","ocean.*"})  //掃描package裡的Class，並對spring物件執行注入
-public class WebConfig extends WebMvcConfigurerAdapter{
+public class SpringConfig extends WebMvcConfigurerAdapter{
 
     public Locale defaultLocale = Locale.TAIWAN;
 
@@ -124,7 +124,7 @@ public class WebConfig extends WebMvcConfigurerAdapter{
         localeResolver.setDefaultLocale(Locale.TAIWAN);
         return localeResolver;
     }
-    
+
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor(){
         LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();

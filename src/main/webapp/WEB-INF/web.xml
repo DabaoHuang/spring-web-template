@@ -11,7 +11,7 @@
         </init-param>
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>config.WebConfig</param-value>
+            <param-value>config.SpringConfig</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>
