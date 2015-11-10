@@ -32,9 +32,6 @@ node 安裝是一個比較容易的方式。
 # run tomcat
 1. mvn tomcat7:run or mvn tomcat7:run
 
-# 備註
-以上指令若有發生問題 請加上 sudo
-
 # mvn 指令
 mvn install   
 mvn compile   
@@ -43,3 +40,10 @@ mvn clean tomcat7:run
 
 # open page
 http:127.0.0.1:8080/index.jsp
+
+# 備註
+1. 以上指令若有發生問題 試試加上 sudo
+2. 使用maven並不受限於使用什麼IDE，但是建議使用intellij.
+
+
+
