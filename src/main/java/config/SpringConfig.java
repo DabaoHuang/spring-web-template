@@ -5,6 +5,7 @@ import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.io.ClassPathResource;
@@ -29,7 +30,8 @@ import java.util.*;
 
 @Configuration
 @EnableWebMvc                           //same as  <mvc:annotation-driven/>
-@ComponentScan({"ocean.aop","ocean.*"})  //掃描package裡的Class，並對spring物件執行注入
+@EnableAspectJAutoProxy                //same as <aop:aspectj-autoproxy></aop:aspectj-autoproxy> 啟動ＡＯＰ掃描
+@ComponentScan({"ocean","ocean.*"})  //掃描package裡的Class，並對spring物件執行注入
 public class SpringConfig extends WebMvcConfigurerAdapter{
 
     public Locale defaultLocale = Locale.TAIWAN;
