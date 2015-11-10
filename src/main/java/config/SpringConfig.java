@@ -36,7 +36,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter{
 
     public Locale defaultLocale = Locale.TAIWAN;
 
-    /* 用來過濾 沒有權限的使用者，此處需要克制一個攔截器
+    /* 用來過濾 沒有權限的使用者，此處需要客制一個攔截器,spring中可加入多個攔截器端看功用
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         super.addInterceptors(registry);
