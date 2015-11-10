@@ -1,18 +1,24 @@
 package config;
 
 
+import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
-import org.springframework.web.accept.ContentNegotiationManager;
-import org.springframework.web.servlet.View;
+
+
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.*;
-import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
+import org.springframework.web.servlet.i18n.CookieLocaleResolver;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
-import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
-import org.springframework.web.servlet.view.json.MappingJacksonJsonView;
+import org.thymeleaf.spring4.SpringTemplateEngine;
+import org.thymeleaf.spring4.view.ThymeleafViewResolver;
+import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 
 import java.util.*;
@@ -23,7 +29,7 @@ import java.util.*;
 
 @Configuration
 @EnableWebMvc                           //same as  <mvc:annotation-driven/>
-@ComponentScan({"eHanlin.aop","eHanlin.*"})  //掃描package裡的Class，並對spring物件執行注入
+@ComponentScan({"ocean.aop","ocean.*"})  //掃描package裡的Class，並對spring物件執行注入
 public class WebConfig extends WebMvcConfigurerAdapter{
 
     /* 用來過濾 沒有權限的使用者，此處需要克制一個攔截器
@@ -37,7 +43,6 @@ public class WebConfig extends WebMvcConfigurerAdapter{
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
-
     }
 
     //same as <mvc:default-servlet-handler/>
@@ -46,19 +51,94 @@ public class WebConfig extends WebMvcConfigurerAdapter{
         configurer.enable();
     }
 
+    //載入環境設定檔
+    @Bean
+    public PropertySourcesPlaceholderConfigurer properties() {
+        PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer = new PropertySourcesPlaceholderConfigurer();
+        propertySourcesPlaceholderConfigurer.setLocation(new ClassPathResource("environment.properties"));
+        /*
+        ArrayList<Resource> list = new ArrayList<Resource>();
+        list.add(new ClassPathResource("environment.properties"));
+        list.add(new ClassPathResource("dbCollection.properties"));
+        */
+        return propertySourcesPlaceholderConfigurer;
+    }
 
+    //
+
+    @Bean
+    public ServletContextTemplateResolver templateResolver(){
+        ServletContextTemplateResolver resolver =  new ServletContextTemplateResolver();
+        resolver.setPrefix("/WEB-INF/view/");
+        resolver.setSuffix(".html");
+        resolver.setTemplateMode("HTML5");
+        resolver.setCharacterEncoding("UTF-8");
+        resolver.setCacheable(false);
+        return resolver;
+    }
+
+    @Bean
+    public SpringTemplateEngine templateEngine(){
+        SpringTemplateEngine engine = new SpringTemplateEngine();
+        engine.setTemplateResolver(templateResolver());
+        engine.addDialect(new LayoutDialect());
+        return engine;
+    }
+
+
+    @Bean
+    public ViewResolver viewResolver(){
+        String [] patten = {"*"};
+        ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
+        viewResolver.setTemplateEngine(templateEngine());
+        viewResolver.setOrder(1);
+        viewResolver.setViewNames(patten);
+        viewResolver.setCache(false);
+        viewResolver.setCharacterEncoding("UTF-8");
+        return viewResolver;
+    }
+
+    @Bean
+    public ReloadableResourceBundleMessageSource messageSource(){
+        ReloadableResourceBundleMessageSource source = new ReloadableResourceBundleMessageSource();
+        source.setBasename("classpath:i18n/messages");
+        source.setDefaultEncoding("UTF-8");
+        return source;
+    }
 
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
         configurer.defaultContentType(MediaType.TEXT_HTML)
                   .mediaType("html", MediaType.TEXT_HTML)
                   .mediaType("json", MediaType.APPLICATION_JSON)
-                   //.mediaType("xml", MediaType.APPLICATION_XML)
+                   //.mediaType("xml", MediaType.APPLICATION_XML);
                   .favorPathExtension(false)
                   .ignoreAcceptHeader(false);
     }
 
+    @Bean
+    public CookieLocaleResolver localeResolver(){
+        CookieLocaleResolver localeResolver = new CookieLocaleResolver();
+        localeResolver.setCookiePath("/");
+        localeResolver.setCookieName("lang");
+        localeResolver.setCookieMaxAge(Integer.MAX_VALUE);
+        localeResolver.setDefaultLocale(Locale.TAIWAN);
+        return localeResolver;
+    }
 
+
+    public Locale defaultLocale = Locale.TAIWAN;
+
+
+    @Bean
+    public LocaleChangeInterceptor localeChangeInterceptor(){
+        LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
+        localeChangeInterceptor.setParamName("lang");
+        return localeChangeInterceptor;
+    }
+
+
+    /*
     @Bean
     public ViewResolver contentNegotiatingViewResolver(ContentNegotiationManager manager) {
         ContentNegotiatingViewResolver resolver = new ContentNegotiatingViewResolver();
@@ -66,7 +146,7 @@ public class WebConfig extends WebMvcConfigurerAdapter{
         // Define all possible view resolvers
         List<ViewResolver> resolvers = new ArrayList<ViewResolver>();
         resolvers.add(jsonViewResolver());
-        
+
         // resolvers.add(jaxb2MarshallingXmlViewResolver());
         // resolvers.add(jspViewResolver());
         // resolvers.add(pdfViewResolver());
@@ -87,7 +167,7 @@ public class WebConfig extends WebMvcConfigurerAdapter{
             }
         };
     }
-
+    */
 
     /*
     @Bean
@@ -102,13 +182,11 @@ public class WebConfig extends WebMvcConfigurerAdapter{
     public ViewResolver pdfViewResolver() {
         return new PdfViewResolver();
     }*/
-
     /*
     @Bean
     public ViewResolver excelViewResolver() {
         return new ExcelViewResolver();
     }*/
-
     /*
     @Bean
     public ViewResolver jspViewResolver() {
@@ -118,8 +196,6 @@ public class WebConfig extends WebMvcConfigurerAdapter{
         viewResolver.setSuffix(".jsp");
         return viewResolver;
     }*/
-
-
     /*
     @Bean
     public InternalResourceViewResolver getInternalResourceViewResolver() {
@@ -128,5 +204,4 @@ public class WebConfig extends WebMvcConfigurerAdapter{
         resolver.setSuffix(".jsp");
         return resolver;
     }*/
-
 }
