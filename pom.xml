@@ -131,7 +131,4 @@
     </build>
 
   </dependencies>
-  <build>
-    <finalName>spring-template</finalName>
-  </build>
 </project>
