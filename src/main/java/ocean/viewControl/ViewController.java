@@ -4,6 +4,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,6 +42,12 @@ public class ViewController {
         System.out.println("============");
         return new ModelAndView(view, model);
 
+    }
+
+
+    @RequestMapping(value = {"/"})
+    public View defaultPage(){
+        return new RedirectView("/index.html");
     }
 
 
