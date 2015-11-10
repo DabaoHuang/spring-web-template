@@ -1,5 +1,5 @@
 # spring-web-template
 template
 
-# start
+# install library
 1.sudo mvn install
