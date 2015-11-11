@@ -1,0 +1,15 @@
+/*
+ * example 個別頁面使用的 css
+ */
+//default color ##29B6F6
+@mixin focusColor($color: #29B6F6) {
+  color: $color;
+}
+
+.circle{
+  width: 100px;
+  height: 100px;
+  display: block;
+  border-radius : 20px;
+  @include focusColor();
+}
