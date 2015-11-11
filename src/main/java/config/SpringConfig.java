@@ -2,6 +2,7 @@ package config;
 
 
 import nz.net.ultraq.thymeleaf.LayoutDialect;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -62,9 +63,11 @@ public class SpringConfig extends WebMvcConfigurerAdapter{
         PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer = new PropertySourcesPlaceholderConfigurer();
         //propertySourcesPlaceholderConfigurer.setLocation(new ClassPathResource("environment.properties"));
         /* 多屬性檔設定方式 */
-        ArrayList<Resource> list = new ArrayList<Resource>();
-        list.add(new ClassPathResource("environment.properties"));
-        list.add(new ClassPathResource("frontEnd.properties"));
+        Resource [] list = {
+                new ClassPathResource("environment.properties"),
+                new ClassPathResource("frontEnd.properties")
+        };
+        propertySourcesPlaceholderConfigurer.setLocations(list);
         return propertySourcesPlaceholderConfigurer;
     }
 
@@ -134,6 +137,11 @@ public class SpringConfig extends WebMvcConfigurerAdapter{
         return localeChangeInterceptor;
     }
 
+
+    @Bean
+    public String css(@Value("${css}") String value){
+        return value;
+    };
     /*
     @Bean
     public ViewResolver contentNegotiatingViewResolver(ContentNegotiationManager manager) {
