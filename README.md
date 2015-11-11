@@ -51,3 +51,8 @@ http:127.0.0.1:8080/index.jsp
 3. DB Connections interface.  (mongodb and T sql db)
 
 
+# mac 
+brew 所安裝的 maven 路徑會在
+/usr/local/Cellar/maven/{version}/
+/usr/local/Cellar/maven/3.2.3/libexec/conf$
+
