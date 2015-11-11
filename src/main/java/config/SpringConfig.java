@@ -9,6 +9,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 
 
@@ -59,12 +60,11 @@ public class SpringConfig extends WebMvcConfigurerAdapter{
     @Bean
     public PropertySourcesPlaceholderConfigurer properties() {
         PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer = new PropertySourcesPlaceholderConfigurer();
-        propertySourcesPlaceholderConfigurer.setLocation(new ClassPathResource("environment.properties"));
-        /* 多屬性檔設定方式
+        //propertySourcesPlaceholderConfigurer.setLocation(new ClassPathResource("environment.properties"));
+        /* 多屬性檔設定方式 */
         ArrayList<Resource> list = new ArrayList<Resource>();
         list.add(new ClassPathResource("environment.properties"));
-        list.add(new ClassPathResource("dbCollection.properties"));
-        */
+        list.add(new ClassPathResource("frontEnd.properties"));
         return propertySourcesPlaceholderConfigurer;
     }
 
