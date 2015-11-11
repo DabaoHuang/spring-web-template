@@ -137,11 +137,24 @@ public class SpringConfig extends WebMvcConfigurerAdapter{
         return localeChangeInterceptor;
     }
 
-
+    /**
+     * 給予 thymeleaf 使用
+     * css path
+     */
     @Bean
     public String css(@Value("${css}") String value){
         return value;
     };
+
+    /**
+     * 給予 thymeleaf 使用
+     * project version
+     */
+    @Bean
+    public String version(@Value("${version}") String value){
+        return value;
+    };
+
     /*
     @Bean
     public ViewResolver contentNegotiatingViewResolver(ContentNegotiationManager manager) {
