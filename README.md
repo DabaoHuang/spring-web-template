@@ -38,6 +38,14 @@ mvn compile
 mvn clean   
 mvn clean tomcat7:run
 
+# Gulp 指令
+1. gulpfile.js 為gulp指令搞檔案。
+2. gulp sass 可編譯所有sass檔案。
+3. gulp sass --f {檔案名稱}，可指定單一檔編譯。
+4. gulp clearCss 可清除所有編譯完的css。
+5. gulp clearCss --f {檔案名稱}，可刪除單一 css。
+6. gulp 則會執行預設的命令。
+
 # open page
 http:127.0.0.1:8080/index.jsp
 
