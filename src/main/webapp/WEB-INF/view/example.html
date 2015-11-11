@@ -3,13 +3,12 @@
 <body>
     <!-- header -->
     <div layout:fragment="header" th:remove="tag"><div th:include="template/header :: header('example')" th:remove="tag"></div></div>
-
-
     <!-- content -->
     <div layout:fragment="content" th:remove="tag">
         <div class="page-content">
             <div class="page-wrap">
                 hello
+                <div class="circle"></div>
             </div>
         </div>
     </div>
