@@ -1,56 +1,79 @@
-/**
- * Created by ocean on 2015/11/11.
- */
-//var gulp = require('gulp');
-var gulp = require('gulp-param')(require('gulp'), process.argv);
 
-var gutil = require('gulp-util');               //
+const gulp    = require('gulp');            //工作管理
+const gutil   = require('gulp-util');
+const fs      = require('fs');              //檔案讀取
+const del     = require('del');             //檔案刪除
+const babel   = require('gulp-babel');      //babel   轉譯
+const coffee  = require('gulp-coffee');     //coffee  轉譯
+const sass    = require('gulp-sass');       //sass    轉譯
+const concat  = require('gulp-concat');     //合併檔案
+const rename  = require('gulp-rename');     //更名工具
+const uglify  = require('gulp-uglify');     //壓縮js工具
+const cssnano = require('gulp-cssnano');    //壓縮css工具
+const browserify = require('gulp-browserify');
 
-//var minifyCSS = require('gulp-minify-css');     //css 壓縮
-//var minJS   = require('gulp-uglify');           //js 壓縮
-//var fileInclude = require('gulp-file-include'); //
-var rename = require('gulp-rename');            //
-//var liveReload = require('gulp-livereload');    //
-//var fs = require('fs');                         //
-//var path = require('path');                     //
-var del = require('del');                         //檔案刪除plugin
-//var coffeeCompile = require('gulp-coffee');     //CoffeeScript Compile
-//var babelCompile = require('gulp-babel');       //Babel Compile
-//var concat = require("gulp-concat");            //file concat
-var less = require('gulp-less');                //less compile
-var sass = require('gulp-sass');
 
-var webapp     = "src/main/webapp/";
-var cssPath    = webapp.concat("dist/css/");
-var sassParent = webapp.concat("sass/");
-var sassPath   = sassParent.concat("**/*.scss");
+const versionRegex = /^version=(\S+)/m;
+const version = fs.readFileSync('./src/main/resources/frontEnd.properties', 'utf8').toString().match(versionRegex)[1];
 
-//sass 任務項目
-//gulp sass or gulp sass --f {your file name}
-gulp.task('sass', function(f){
-        if(f) {
-            return gulp.src(sassParent.concat(f))
-                .pipe(sass())
-                .pipe(gulp.dest(cssPath));
-        }else{
-            return gulp.src(sassPath)
-                .pipe(sass())
-                //.pipe(minifycss())
-                .pipe(gulp.dest(cssPath));
-        }
+//path
+const path = {};
+      path.root     = './src/main';
+      path.webapp   = './src/main/webapp'
+      path.dist     = './src/main/webapp/dist';
+      path.js       = './src/main/webapp/dist/' + version + '/js';
+      path.css      = './src/main/webapp/dist/' + version + '/css'; 
+      path.resource = './src/main/webapp/resource';
+      path.babel    = './src/main/webapp/babel';
+      path.coffee   = './src/main/webapp/coffee';
+      path.sass     = './src/main/webapp/sass';
+      path.temp     = './src/main/webapp/temp';
+      path.tempjs   = './src/main/webapp/temp/js';
+      path.clean    = './src/main/webapp/dist/' + version;
+      path.cleanTmp = './src/main/webapp/temp/**/'; 
+
+
+//browserify 將有使用到 require 部分合併
+var browserifyTask = function(){
+     return gulp.src( path.tempjs+'/**/*.js' , {read: false})
+                .pipe(browserify({extensions: ['.js']}))
+                .pipe(gulp.dest( path.js ))
+};
+
+//compile babel
+gulp.task('babel', function() {
+    //del(path.tempjs+'/**/');
+    return gulp.src(path.babel+'/**/*.js')
+                .pipe(babel({presets: ['es2015']}))
+                //.pipe(babel())
+                .pipe(gulp.dest( path.tempjs  ));
 });
 
 
-//清除dist內的css
-//gulp clearCss --f {your file name} or gulp clearCss
-gulp.task('clearCss', function(f){
-        if(f){
-            return del([cssPath.concat(f)]);
-        }else{
-            return del([cssPath]);
-        }
+//compile coffee
+gulp.task('coffee',function() {
+    return gulp.src(path.coffee+'/**/*.coffee')
+               .pipe(coffee({bare: true}).on('error', gutil.log))
+               .pipe(gulp.dest( path.tempjs  ));
 });
+
+//compile sass
+gulp.task('sass', function () {
+  return gulp.src( path.sass+'/**/*.scss')
+             .pipe(sass().on('error', sass.logError))
+             .pipe(gulp.dest(path.css ));
+});
+
+
+//group task
+gulp.task('build', ['babel','coffee' , 'sass'], function(){
+    browserifyTask();
+});
+
 
 
 //預設動作
-gulp.task('default',['sass']);
+/*
+gulp.task('default',function(){
+
+});*/
