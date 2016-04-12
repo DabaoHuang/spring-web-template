@@ -1,4 +1,5 @@
-$ = require 'jquery'
+hahahaha = require './public/Lib.js'
+console.log(hahahaha);
 EXAMPLE = ((window, document)->
 	text = ''
 	print = ()-> console.log(text);

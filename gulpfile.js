@@ -33,21 +33,29 @@ const path = {};
       path.cleanTmp = './src/main/webapp/temp/**/'; 
 
 
+
 //browserify 將有使用到 require 部分合併
 var browserifyTask = function(){
-     return gulp.src( path.tempjs+'/**/*.js' , {read: false})
+    // ! 排除pbulic 部分輸出
+     return gulp.src( [path.tempjs+'/**/*.js', '!./src/main/webapp/temp/js/public/**/*.js'] , {read: false})
                 .pipe(browserify({extensions: ['.js']}))
                 .pipe(gulp.dest( path.js ))
 };
 
-//compile babel
-gulp.task('babel', function() {
-    //del(path.tempjs+'/**/');
-    return gulp.src(path.babel+'/**/*.js')
-                .pipe(babel({presets: ['es2015']}))
-                //.pipe(babel())
-                .pipe(gulp.dest( path.tempjs  ));
+gulp.task('clean', function(){
+    del(path.temp+'/**/');
+    del(path.dist+'/**');
 });
+
+//compile babel
+//del(path.tempjs+'/**/');
+//gulp.task('babel', function() {
+//    return gulp.src(path.babel+'/**/*.js')
+//                .pipe(babel({presets: ['es2015']}))
+//                //.pipe(babel())
+//                .pipe(gulp.dest( path.tempjs  ));
+//});
+
 
 
 //compile coffee
@@ -59,21 +67,20 @@ gulp.task('coffee',function() {
 
 //compile sass
 gulp.task('sass', function () {
-  return gulp.src( path.sass+'/**/*.scss')
-             .pipe(sass().on('error', sass.logError))
-             .pipe(gulp.dest(path.css ));
+    //! 是排除的對象
+    return gulp.src( [path.sass+'/**/*.scss', '!./src/main/webapp/sass/public/**/*.scss'])
+               .pipe(sass().on('error', sass.logError))
+               .pipe(gulp.dest(path.css ));
 });
 
 
 //group task
-gulp.task('build', ['babel','coffee' , 'sass'], function(){
+gulp.task('build', ['coffee' , 'sass'], function(){
     browserifyTask();
 });
 
 
 
 //預設動作
-/*
-gulp.task('default',function(){
-
-});*/
+gulp.task('default',['build'],function(){
+});

@@ -4,4 +4,9 @@
 
 body{
   background: #E8F5E9;
+  & .page-content{
+  	& h1{
+  		color : red;
+  	}
+  }
 }

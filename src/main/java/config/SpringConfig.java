@@ -155,6 +155,12 @@ public class SpringConfig extends WebMvcConfigurerAdapter{
         return value;
     };
 
+
+        @Bean
+    public String js(@Value("${js}") String value){
+        return value;
+    };
+
     /*
     @Bean
     public ViewResolver contentNegotiatingViewResolver(ContentNegotiationManager manager) {
