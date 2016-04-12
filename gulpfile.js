@@ -33,18 +33,20 @@ const path = {};
       path.cleanTmp = './src/main/webapp/temp/**/'; 
 
 
-
 //browserify 將有使用到 require 部分合併
 var browserifyTask = function(){
     // ! 排除pbulic 部分輸出
      return gulp.src( [path.tempjs+'/**/*.js', '!./src/main/webapp/temp/js/public/**/*.js'] , {read: false})
                 .pipe(browserify({extensions: ['.js']}))
                 .pipe(gulp.dest( path.js ))
+                .on('end',function(){
+                     del([path.temp+'/**/']);   //測試時可將此註解即可看到temp內容
+                });      
 };
 
+
 gulp.task('clean', function(){
-    del(path.temp+'/**/');
-    del(path.dist+'/**');
+     del([path.dist+'/**',path.temp+'/**/']); 
 });
 
 //compile babel
@@ -55,7 +57,6 @@ gulp.task('clean', function(){
 //                //.pipe(babel())
 //                .pipe(gulp.dest( path.tempjs  ));
 //});
-
 
 
 //compile coffee
@@ -80,7 +81,7 @@ gulp.task('build', ['coffee' , 'sass'], function(){
 });
 
 
-
 //預設動作
-gulp.task('default',['build'],function(){
+gulp.task('default',['clean'],function(){
+
 });
