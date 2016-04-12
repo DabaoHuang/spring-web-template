@@ -22,13 +22,13 @@ node 安裝是一個比較容易的方式。
 #快速開始:
 
  1. mvn install
- 2. npm install   
+ 2. npm install
  3. mvn clean tomcat7:run or mvn tomcat7:run
  
  說明: 
-  a. mav install 依pom.xml下載後端使用套件。
-  b. npm install 依package.json裡的列表下載所需要的套件。
-  c. mvn tomcat:run 啟動tomcat
+  a. mav install 依pom.xml下載後端使用套件。   
+  b. npm install 依package.json裡的列表下載所需要的套件。   
+  c. mvn tomcat:run 啟動tomcat   
 
 
 # mvn 指令
