@@ -82,6 +82,6 @@ gulp.task('build', ['coffee' , 'sass'], function(){
 
 
 //預設動作
-gulp.task('default',['clean'],function(){
+gulp.task('default',['build'],function(){
 
 });
